@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import styled from "@emotion/styled";
 import _ from "underscore";
-import TasksList from "../../components/TasksList";
-import Form from "../../components/Form";
+import TasksList from "components/TasksList";
+import Form from "components/Form";
+import Button from "components/Button";
 
 const Container = styled.div`
     display: flex;
@@ -59,10 +60,10 @@ const Home = () => {
     return (
         <Container>
             <h1>Lista de Tareas</h1>
-            <button onClick={() => setShowDoneTasks(!showDoneTasks)}>
-                {`${showDoneTasks ? "Ocultar" : "Mostrar"} completadas`}
-            </button>
-
+            <Button
+                text={`${showDoneTasks ? "Ocultar" : "Mostrar"} completadas`}
+                onClick={() => setShowDoneTasks(!showDoneTasks)}
+            />
             <Form handleSubmit={handleSubmit} />
             <br />
 
