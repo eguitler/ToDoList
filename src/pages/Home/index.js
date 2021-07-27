@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import styled from "@emotion/styled";
 import _ from "underscore";
 import TasksList from "../../components/TasksList";
+import Form from "../../components/Form";
 
 const Container = styled.div`
     display: flex;
@@ -61,10 +62,8 @@ const Home = () => {
             <button onClick={() => setShowDoneTasks(!showDoneTasks)}>
                 {`${showDoneTasks ? "Ocultar" : "Mostrar"} completadas`}
             </button>
-            <form onSubmit={handleSubmit}>
-                <input name="task" placeholder="Nueva Tarea" />
-                <button>Agregar</button>
-            </form>
+
+            <Form handleSubmit={handleSubmit} />
             <br />
 
             <TasksListStyled>
