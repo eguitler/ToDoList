@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "@emotion/styled";
 import _ from "underscore";
-import Task from "../../components/Task";
+import TasksList from "../../components/TasksList";
 
 const Container = styled.div`
     display: flex;
@@ -28,10 +28,11 @@ const Home = () => {
             id: _.uniqueId("task-"),
             description: e.target.task.value,
             position: taskPosition,
+            checked: false,
         };
         setPendingTasks([...pendingTasks, newTask]);
         setTaskPosition(taskPosition + 1);
-        e.target.task.value = ""
+        e.target.task.value = "";
     }
 
     function handleTaskCheck(e) {
@@ -40,12 +41,13 @@ const Home = () => {
 
         if (markAsDone) {
             const task = pendingTasks.find((task) => task.id === id);
+            task.checked = true;
             setDoneTasks([...doneTasks, task]);
             const newList = pendingTasks.filter((task) => task.id !== id);
             setPendingTasks([...newList]);
         } else {
             const task = doneTasks.find((task) => task.id === id);
-
+            task.checked = false;
             const pendingList = _.sortBy([...pendingTasks, task], "position");
             setPendingTasks([...pendingList]);
             const newList = doneTasks.filter((task) => task.id !== id);
@@ -66,29 +68,17 @@ const Home = () => {
             <br />
 
             <TasksListStyled>
-                <div>
-                    <h3>PENDING</h3>
-                    {[...pendingTasks].reverse().map((task) => (
-                        <Task
-                            key={task.id}
-                            task={task}
-                            onCheck={handleTaskCheck}
-                        />
-                    ))}
-                    <br />
-                </div>
+                <TasksList
+                    title="PENDING"
+                    tasks={pendingTasks}
+                    onCheck={handleTaskCheck}
+                />
                 {showDoneTasks && (
-                    <div>
-                        <h3>DONE</h3>
-                        {[...doneTasks].reverse().map((task) => (
-                            <Task
-                                key={task.id}
-                                task={task}
-                                checked={true}
-                                onCheck={handleTaskCheck}
-                            />
-                        ))}
-                    </div>
+                    <TasksList
+                        title="DONE"
+                        tasks={doneTasks}
+                        onCheck={handleTaskCheck}
+                    />
                 )}
             </TasksListStyled>
         </Container>
