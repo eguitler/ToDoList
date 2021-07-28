@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import styled from "@emotion/styled";
+import { connect } from "react-redux";
+import { updateTaskDescription } from "taskReducers";
 
 const Container = styled.div`
     border: 1px solid;
@@ -50,18 +52,29 @@ const EditFormStyled = styled.div`
     }
 `;
 
-const Task = ({ task, checked = false, onCheck = null }) => {
+const Task = ({ task, checked, onCheck, updateTaskDescription }) => {
     const [editFormIsMounted, setEditFormIsMounted] = useState(false);
     const [showEditForm, setShowEditForm] = useState(false);
 
-    function handleSubmit(e) {
-        e.preventDefault();
-        const value = e.target.edit.value
-    }
+    const TASKSLISTS = {
+        doneTasks: "doneTasks",
+        pendingTasks: "pendingTasks",
+    };
 
     function handleEdit() {
         setEditFormIsMounted(!editFormIsMounted);
         if (!showEditForm) setShowEditForm(true);
+    }
+
+    function updateDescription(e) {
+        e.preventDefault();
+        updateTaskDescription({
+            taskId: task.id,
+            tasksList: task.checked
+                ? TASKSLISTS.doneTasks
+                : TASKSLISTS.pendingTasks,
+            newDescription: e.target.edit.value,
+        });
     }
 
     return (
@@ -85,7 +98,7 @@ const Task = ({ task, checked = false, onCheck = null }) => {
                         if (!editFormIsMounted) setShowEditForm(false);
                     }}
                 >
-                    <form onSubmit={handleSubmit}>
+                    <form onSubmit={updateDescription}>
                         <input name="edit" />
                         <button>Guardar</button>
                     </form>
@@ -95,4 +108,11 @@ const Task = ({ task, checked = false, onCheck = null }) => {
     );
 };
 
-export default Task;
+const mapDispatchToProps = (dispatch) => {
+    return {
+        updateTaskDescription: (taskData) =>
+            dispatch(updateTaskDescription(taskData)),
+    };
+};
+
+export default connect(null, mapDispatchToProps)(Task);

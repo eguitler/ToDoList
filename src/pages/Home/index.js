@@ -4,6 +4,13 @@ import _ from "underscore";
 import TasksList from "components/TasksList";
 import Form from "components/Form";
 import Button from "components/Button";
+import {
+    addToDone,
+    addToPending,
+    removeFromDone,
+    removeFromPending,
+} from "taskReducers";
+import { connect } from "react-redux";
 
 const Container = styled.div`
     display: flex;
@@ -13,6 +20,7 @@ const Container = styled.div`
     max-width: 400px;
     border: 1px solid;
     margin: 0 auto;
+    gap: 50px;
 `;
 
 const TasksListStyled = styled.div`
@@ -20,23 +28,26 @@ const TasksListStyled = styled.div`
     border: 1px solid;
 `;
 
-const Home = () => {
-    const [pendingTasks, setPendingTasks] = useState([]);
-    const [doneTasks, setDoneTasks] = useState([]);
+const Home = ({
+    newPosition,
+    doneTasks,
+    pendingTasks,
+    addToDone,
+    addToPending,
+    removeFromDone,
+    removeFromPending,
+}) => {
     const [showDoneTasks, setShowDoneTasks] = useState(true);
-
-    const [taskPosition, setTaskPosition] = useState(0);
 
     function createNewTask(e) {
         e.preventDefault();
         const newTask = {
             id: _.uniqueId("task-"),
             description: e.target.task.value,
-            position: taskPosition,
+            position: newPosition,
             checked: false,
         };
-        setPendingTasks([...pendingTasks, newTask]);
-        setTaskPosition(taskPosition + 1);
+        addToPending(newTask);
         e.target.task.value = "";
     }
 
@@ -45,10 +56,9 @@ const Home = () => {
 
         const task = pendingTasks.find((task) => task.id === id);
         task.checked = true;
-        setDoneTasks([...doneTasks, task]);
 
-        const newPendingList = pendingTasks.filter((task) => task.id !== id);
-        setPendingTasks([...newPendingList]);
+        addToDone(task);
+        removeFromPending(task.id);
     }
 
     function moveTaskToPending(e) {
@@ -57,22 +67,22 @@ const Home = () => {
         const task = doneTasks.find((task) => task.id === id);
         task.checked = false;
 
-        const newPendingList = _.sortBy([...pendingTasks, task], "position");
-        setPendingTasks([...newPendingList]);
-
-        const newDoneList = doneTasks.filter((task) => task.id !== id);
-        setDoneTasks([...newDoneList]);
+        addToPending(task);
+        removeFromDone(task.id);
     }
 
     return (
         <Container>
-            <h1>Lista de Tareas</h1>
-            <Button
-                text={`${showDoneTasks ? "Ocultar" : "Mostrar"} completadas`}
-                onClick={() => setShowDoneTasks(!showDoneTasks)}
-            />
-            <Form handleSubmit={createNewTask} />
-            <br />
+            <div>
+                <h1>Lista de Tareas</h1>
+                <Button
+                    text={`${
+                        showDoneTasks ? "Ocultar" : "Mostrar"
+                    } completadas`}
+                    onClick={() => setShowDoneTasks(!showDoneTasks)}
+                />
+                <Form handleSubmit={createNewTask} />
+            </div>
 
             <TasksListStyled>
                 <TasksList
@@ -92,4 +102,21 @@ const Home = () => {
     );
 };
 
-export default Home;
+const mapStateToProps = (state) => {
+    return {
+        doneTasks: state.doneTasks,
+        pendingTasks: state.pendingTasks,
+        newPosition: state.positionTask,
+    };
+};
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        addToPending: (newTask) => dispatch(addToPending(newTask)),
+        removeFromPending: (taskId) => dispatch(removeFromPending(taskId)),
+        addToDone: (newTask) => dispatch(addToDone(newTask)),
+        removeFromDone: (taskId) => dispatch(removeFromDone(taskId)),
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home);
