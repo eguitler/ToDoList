@@ -17,15 +17,34 @@ const Container = styled.div`
     flex-direction: column;
     align-items: center;
     width: 90%;
-    max-width: 400px;
-    border: 1px solid;
+    max-width: 500px;
+    min-width: 250px;
     margin: 0 auto;
-    gap: 50px;
-`;
+    gap: 30px;
 
-const TasksListStyled = styled.div`
-    width: 100%;
-    border: 1px solid;
+    .title-wrapper {
+        margin-top: 30px;
+        font-size: 1rem;
+        
+        @media screen and (min-width: 480px) {
+            font-size: 1.5rem;
+        }
+    }
+
+    .btn-showdonetasks-wrapper {
+        height: 45px;
+    }
+
+    .form-newtask-wrapper {
+        width: 100%;
+    }
+
+    .lists-wrapper {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
 `;
 
 const Home = ({
@@ -73,18 +92,27 @@ const Home = ({
 
     return (
         <Container>
-            <div>
+            <div className="title-wrapper">
                 <h1>Lista de Tareas</h1>
+            </div>
+            <div className="btn-showdonetasks-wrapper">
                 <Button
                     text={`${
                         showDoneTasks ? "Ocultar" : "Mostrar"
                     } completadas`}
                     onClick={() => setShowDoneTasks(!showDoneTasks)}
                 />
-                <Form handleSubmit={createNewTask} />
+            </div>
+            <div className="form-newtask-wrapper">
+                <Form
+                    onSubmit={createNewTask}
+                    inputName="task"
+                    inputPlaceHolder="Nueva tarea"
+                    textButton="Agregar"
+                />
             </div>
 
-            <TasksListStyled>
+            <div className="lists-wrapper">
                 <TasksList
                     title="PENDING"
                     tasks={pendingTasks}
@@ -97,7 +125,7 @@ const Home = ({
                         onCheck={moveTaskToPending}
                     />
                 )}
-            </TasksListStyled>
+            </div>
         </Container>
     );
 };

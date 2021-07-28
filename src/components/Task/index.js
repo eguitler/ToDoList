@@ -2,36 +2,73 @@ import React, { useState } from "react";
 import styled from "@emotion/styled";
 import { connect } from "react-redux";
 import { updateTaskDescription } from "taskReducers";
+import Form from "components/Form";
 
 const Container = styled.div`
-    border: 1px solid;
-    padding: 10px 20px;
     width: 100%;
+`;
+
+const TaskStyled = styled.div`
+    display: grid;
+    grid-template-columns: 5% 80% 15%;
+    align-items: center;
+    padding: 10px 0;
+
+    .checkbox {
+        cursor: pointer;
+    }
+
+    .description {
+        text-align: left;
+        overflow-wrap: break-word;
+        flex-grow: 1;
+        padding: 0 15px;
+
+        &.done {
+            text-decoration: line-through;
+        }
+    }
+
+    .edit-icon-wrapper {
+        width: 100%;
+        cursor: pointer;
+        display: grid;
+        place-items: center right;
+
+        img {
+            height: 35px;
+            opacity: 0.4;
+        }
+    }
 `;
 
 const EditFormStyled = styled.div`
     overflow: hidden;
-    transition: height 1s;
     height: 0px;
+    padding-left: 35px;
+    padding-right: 5px;
 
-    form {
-        display: flex;
-        justify-content: space-between;
+    .form-wrapper {
+        padding: 3px 0;
+        width: 100%;
+        height: 100%;
 
-        input {
-            width: 60%;
-        }
-        button {
-            width: 35%;
+        @media screen and (min-width: 360px) {
         }
     }
 
     &.close {
-        animation: hide 1s forwards;
+        animation: hide 500ms forwards;
     }
 
     &.open {
-        animation: show 1s forwards;
+        animation: show 500ms forwards;
+    }
+
+    --formHeight: 100px;
+
+    @media screen and (min-width: 360px) {
+        --formHeight: 50px;
     }
 
     @keyframes show {
@@ -39,12 +76,13 @@ const EditFormStyled = styled.div`
             height: 0;
         }
         to {
-            height: 40px;
+            height: var(--formHeight);
         }
     }
+
     @keyframes hide {
         from {
-            height: 40px;
+            height: var(--formHeight);
         }
         to {
             height: 0;
@@ -79,18 +117,26 @@ const Task = ({ task, checked, onCheck, updateTaskDescription }) => {
 
     return (
         <Container>
-            <input
-                name="checkbox"
-                type="checkbox"
-                taskid={task.id}
-                defaultChecked={checked}
-                onClick={onCheck}
-            />
-            <span>{task.position} </span>
-            <span>{task.description} </span>
-            <button type="button" onClick={handleEdit}>
-                edit
-            </button>
+            <TaskStyled>
+                <input
+                    name="checkbox"
+                    type="checkbox"
+                    className="checkbox"
+                    taskid={task.id}
+                    defaultChecked={checked}
+                    onClick={onCheck}
+                />
+                <p className={`description ${task.checked ? "done" : ""}`}>
+                    {task.description}{" "}
+                </p>
+                <div
+                    className="edit-icon-wrapper"
+                    title="Editar tarea"
+                    onClick={handleEdit}
+                >
+                    <img src="/icons/edit.svg" alt="Editar tarea" />
+                </div>
+            </TaskStyled>
             {showEditForm && (
                 <EditFormStyled
                     className={editFormIsMounted ? "open" : "close"}
@@ -98,10 +144,14 @@ const Task = ({ task, checked, onCheck, updateTaskDescription }) => {
                         if (!editFormIsMounted) setShowEditForm(false);
                     }}
                 >
-                    <form onSubmit={updateDescription}>
-                        <input name="edit" />
-                        <button>Guardar</button>
-                    </form>
+                    <div className="form-wrapper">
+                        <Form
+                            onSubmit={updateDescription}
+                            inputName="edit"
+                            inputPlaceHolder="Nueva descripción"
+                            textButton="Guardar"
+                        />
+                    </div>
                 </EditFormStyled>
             )}
         </Container>
