@@ -21,6 +21,7 @@ const Container = styled.div`
     min-width: 250px;
     margin: 0 auto;
     gap: 30px;
+    min-height: 100vh;
 
     .title-wrapper {
         margin-top: 30px;
