@@ -1,7 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "@emotion/styled";
 import { connect } from "react-redux";
-import { updateTaskDescription } from "taskReducers";
+import {
+    editTaskDescription,
+    openEditForm,
+    updateTaskDescription,
+} from "taskReducers";
 import Form from "components/Form";
 
 const Container = styled.div`
@@ -12,7 +16,13 @@ const TaskStyled = styled.div`
     display: grid;
     grid-template-columns: 5% 80% 15%;
     align-items: center;
-    padding: 10px 0;
+    padding: 10px 5px;
+    transition: all 300ms;
+
+    &.highlight {
+        background-color: rgba(46, 137, 255, 0.15);
+        border-radius: 5px;
+    }
 
     .checkbox {
         cursor: pointer;
@@ -90,7 +100,14 @@ const EditFormStyled = styled.div`
     }
 `;
 
-const Task = ({ task, checked, onCheck, updateTaskDescription }) => {
+const Task = ({
+    task,
+    checked,
+    onCheck,
+    taskIdEditFormOpened,
+    openEditForm,
+    updateTaskDescription,
+}) => {
     const [editFormIsMounted, setEditFormIsMounted] = useState(false);
     const [showEditForm, setShowEditForm] = useState(false);
 
@@ -101,7 +118,10 @@ const Task = ({ task, checked, onCheck, updateTaskDescription }) => {
 
     function handleEdit() {
         setEditFormIsMounted(!editFormIsMounted);
-        if (!showEditForm) setShowEditForm(true);
+        openEditForm(!editFormIsMounted ? task.id : null);
+        if (!showEditForm) {
+            setShowEditForm(true);
+        }
     }
 
     function updateDescription(newDescription) {
@@ -114,9 +134,15 @@ const Task = ({ task, checked, onCheck, updateTaskDescription }) => {
         });
     }
 
+    useEffect(() => {
+        if (editFormIsMounted && taskIdEditFormOpened !== task.id)
+            setEditFormIsMounted(false);
+    }, [taskIdEditFormOpened]);
     return (
         <Container>
-            <TaskStyled>
+            <TaskStyled
+                className={taskIdEditFormOpened === task.id ? "highlight" : ""}
+            >
                 <input
                     name="checkbox"
                     type="checkbox"
@@ -146,7 +172,7 @@ const Task = ({ task, checked, onCheck, updateTaskDescription }) => {
                     <div className="form-wrapper">
                         <Form
                             onSubmit={updateDescription}
-                            inputName="edit"
+                            // inputName="edit"
                             inputPlaceHolder="Nueva descripción"
                             textButton="Guardar"
                         />
@@ -157,11 +183,18 @@ const Task = ({ task, checked, onCheck, updateTaskDescription }) => {
     );
 };
 
+const mapStateToProps = (state) => {
+    return {
+        taskIdEditFormOpened: state.taskIdEditFormOpened,
+    };
+};
+
 const mapDispatchToProps = (dispatch) => {
     return {
+        openEditForm: (taskId) => dispatch(openEditForm(taskId)),
         updateTaskDescription: (taskData) =>
             dispatch(updateTaskDescription(taskData)),
     };
 };
 
-export default connect(null, mapDispatchToProps)(Task);
+export default connect(mapStateToProps, mapDispatchToProps)(Task);

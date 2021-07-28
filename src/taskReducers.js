@@ -3,6 +3,7 @@ import {
     REMOVE_FROM_PENDING,
     ADD_TO_DONE,
     REMOVE_FROM_DONE,
+    OPEN_EDIT_FORM,
     UPDATE_TASK_DESCRIPTION,
 } from "taskActions";
 
@@ -13,6 +14,7 @@ const initialState = {
     pendingTasks: [],
     doneTasks: [],
     positionTask: 0,
+    taskIdEditFormOpened: null
 };
 
 export const tasksReducer = (state = initialState, action) => {
@@ -43,6 +45,12 @@ export const tasksReducer = (state = initialState, action) => {
             doneTasks: [...state.doneTasks.filter( task => task.id !== action.taskId)],
         };
     }
+    if (action.type === OPEN_EDIT_FORM) {
+        return {
+            ...state,
+            taskIdEditFormOpened: action.taskId
+        };
+    }
     if (action.type === UPDATE_TASK_DESCRIPTION) {
         return {
             ...state,
@@ -50,6 +58,7 @@ export const tasksReducer = (state = initialState, action) => {
                 if (task.id === action.taskId) task.description = action.newDescription
                 return task
             }),
+            editFormOpened: null
         };
     }
     return state;
@@ -79,6 +88,14 @@ export const addToDone = (newTask) => {
 export const removeFromDone = (taskId) => {
     return {
         type: REMOVE_FROM_DONE,
+        taskId
+    };
+};
+
+export const openEditForm = (taskId) => {
+    console.log("qqq: ", taskId)
+    return {
+        type: OPEN_EDIT_FORM,
         taskId
     };
 };
