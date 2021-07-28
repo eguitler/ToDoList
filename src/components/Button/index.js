@@ -13,21 +13,29 @@ const ButtonStyled = styled.button`
     transition: all 300ms;
 
     &.primary {
-        background-color: #2E89FF;
-        border: 1px solid #2E89FF;
+        background-color: rgba(46, 137, 255, .8);
+        border: none;
         color: #f0f0f0;
+        
+        :hover {
+            background-color: rgba(46, 137, 255, 1);
+        }
     }
     
     &.default {
         background-color: transparent;
-        border: 1px solid #2E89FF;
-        color: #2E89FF;
+        border: 1px solid transparent;
+        color: rgba(46, 137, 255, 1);
+        
+        :hover {
+            border: 1px solid rgba(46, 137, 255, 1);
+        }
     }
 
     &.disabled {
         pointer-events: none;
         opacity: .7;
-        filter: saturate(.5)
+        filter: saturate(.3)
     }
 `;
 
