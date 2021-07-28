@@ -9,12 +9,15 @@ const Container = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
+    width: 90%;
+    max-width: 400px;
+    border: 1px solid;
+    margin: 0 auto;
 `;
 
 const TasksListStyled = styled.div`
+    width: 100%;
     border: 1px solid;
-    width: 90%;
-    max-width: 400px;
 `;
 
 const Home = () => {
