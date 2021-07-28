@@ -116,7 +116,7 @@ const Task = ({
         pendingTasks: "pendingTasks",
     };
 
-    function handleEdit() {
+    function handleShowHideEditForm() {
         setEditFormIsMounted(!editFormIsMounted);
         openEditForm(!editFormIsMounted ? task.id : null);
         if (!showEditForm) {
@@ -157,11 +157,12 @@ const Task = ({
                 <div
                     className="edit-icon-wrapper"
                     title="Editar tarea"
-                    onClick={handleEdit}
+                    onClick={handleShowHideEditForm}
                 >
                     <img src="/icons/edit.svg" alt="Editar tarea" />
                 </div>
             </TaskStyled>
+
             {showEditForm && (
                 <EditFormStyled
                     className={editFormIsMounted ? "open" : "close"}
@@ -172,7 +173,6 @@ const Task = ({
                     <div className="form-wrapper">
                         <Form
                             onSubmit={updateDescription}
-                            // inputName="edit"
                             inputPlaceHolder="Nueva descripción"
                             textButton="Guardar"
                         />
