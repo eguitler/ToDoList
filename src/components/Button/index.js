@@ -7,6 +7,10 @@ const ButtonStyled = styled.button`
     border-radius: 5px;
     padding: 5px 10px;
     cursor: pointer;
+    user-select: none;
+    opacity: 1;
+    filter: saturate(1);
+    transition: all 300ms;
 
     &.primary {
         background-color: #2E89FF;
@@ -19,12 +23,18 @@ const ButtonStyled = styled.button`
         border: 1px solid #2E89FF;
         color: #2E89FF;
     }
+
+    &.disabled {
+        pointer-events: none;
+        opacity: .7;
+        filter: saturate(.5)
+    }
 `;
 
-const Button = ({ text, primary = false, onClick = null }) => {
+const Button = ({ text, primary = false, onClick = null, disabled=false }) => {
     return (
         <ButtonStyled
-            className={primary ? "primary" : "default"}
+            className={`${primary ? "primary" : "default"} ${disabled ? "disabled" : ""}`}
             onClick={onClick}
         >
             {text}

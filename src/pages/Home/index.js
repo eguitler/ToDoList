@@ -58,16 +58,15 @@ const Home = ({
 }) => {
     const [showDoneTasks, setShowDoneTasks] = useState(true);
 
-    function createNewTask(e) {
-        e.preventDefault();
+
+    function createNewTask(inputValue) {
         const newTask = {
             id: _.uniqueId("task-"),
-            description: e.target.task.value,
+            description: inputValue,
             position: newPosition,
             checked: false,
         };
         addToPending(newTask);
-        e.target.task.value = "";
     }
 
     function moveTaskToDone(e) {

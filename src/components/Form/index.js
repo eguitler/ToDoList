@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import Button from "components/Button";
-import React from "react";
+import React, { useState } from "react";
 
 const FormStyled = styled.form`
     height: 80px;
@@ -43,12 +43,30 @@ const FormStyled = styled.form`
     }
 `;
 
-const Form = ({ onSubmit, inputName, inputPlaceHolder, textButton }) => {
+const Form = ({ onSubmit, inputPlaceHolder, textButton }) => {
+    const [input, setInput] = useState("");
+
+    function handleChange(e) {
+        setInput(e.target.value);
+    }
+
+    function handleSubmit(e) {
+        e.preventDefault();
+        if (input) {
+            onSubmit(input);
+            setInput("");
+        }
+    }
+
     return (
-        <FormStyled onSubmit={onSubmit}>
-            <input name={inputName} placeholder={inputPlaceHolder} />
+        <FormStyled onSubmit={handleSubmit}>
+            <input
+                placeholder={inputPlaceHolder}
+                onChange={handleChange}
+                value={input}
+            />
             <div className="button-wrapper">
-                <Button text={textButton} primary={true} />
+                <Button text={textButton} primary={true} disabled={!input} />
             </div>
         </FormStyled>
     );

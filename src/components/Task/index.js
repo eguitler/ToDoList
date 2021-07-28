@@ -104,14 +104,13 @@ const Task = ({ task, checked, onCheck, updateTaskDescription }) => {
         if (!showEditForm) setShowEditForm(true);
     }
 
-    function updateDescription(e) {
-        e.preventDefault();
+    function updateDescription(newDescription) {
         updateTaskDescription({
             taskId: task.id,
             tasksList: task.checked
                 ? TASKSLISTS.doneTasks
                 : TASKSLISTS.pendingTasks,
-            newDescription: e.target.edit.value,
+            newDescription: newDescription,
         });
     }
 
