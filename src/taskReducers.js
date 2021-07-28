@@ -93,7 +93,6 @@ export const removeFromDone = (taskId) => {
 };
 
 export const openEditForm = (taskId) => {
-    console.log("qqq: ", taskId)
     return {
         type: OPEN_EDIT_FORM,
         taskId
