@@ -24,7 +24,7 @@ const Home = () => {
 
     const [taskPosition, setTaskPosition] = useState(0);
 
-    function handleSubmit(e) {
+    function createNewTask(e) {
         e.preventDefault();
         const newTask = {
             id: _.uniqueId("task-"),
@@ -37,24 +37,28 @@ const Home = () => {
         e.target.task.value = "";
     }
 
-    function handleTaskCheck(e) {
-        const markAsDone = e.target.checked;
+    function moveTaskToDone(e) {
         const id = e.target.attributes.taskid.value;
 
-        if (markAsDone) {
-            const task = pendingTasks.find((task) => task.id === id);
-            task.checked = true;
-            setDoneTasks([...doneTasks, task]);
-            const newList = pendingTasks.filter((task) => task.id !== id);
-            setPendingTasks([...newList]);
-        } else {
-            const task = doneTasks.find((task) => task.id === id);
-            task.checked = false;
-            const pendingList = _.sortBy([...pendingTasks, task], "position");
-            setPendingTasks([...pendingList]);
-            const newList = doneTasks.filter((task) => task.id !== id);
-            setDoneTasks([...newList]);
-        }
+        const task = pendingTasks.find((task) => task.id === id);
+        task.checked = true;
+        setDoneTasks([...doneTasks, task]);
+
+        const newPendingList = pendingTasks.filter((task) => task.id !== id);
+        setPendingTasks([...newPendingList]);
+    }
+
+    function moveTaskToPending(e) {
+        const id = e.target.attributes.taskid.value;
+
+        const task = doneTasks.find((task) => task.id === id);
+        task.checked = false;
+
+        const newPendingList = _.sortBy([...pendingTasks, task], "position");
+        setPendingTasks([...newPendingList]);
+
+        const newDoneList = doneTasks.filter((task) => task.id !== id);
+        setDoneTasks([...newDoneList]);
     }
 
     return (
@@ -64,20 +68,20 @@ const Home = () => {
                 text={`${showDoneTasks ? "Ocultar" : "Mostrar"} completadas`}
                 onClick={() => setShowDoneTasks(!showDoneTasks)}
             />
-            <Form handleSubmit={handleSubmit} />
+            <Form handleSubmit={createNewTask} />
             <br />
 
             <TasksListStyled>
                 <TasksList
                     title="PENDING"
                     tasks={pendingTasks}
-                    onCheck={handleTaskCheck}
+                    onCheck={moveTaskToDone}
                 />
                 {showDoneTasks && (
                     <TasksList
                         title="DONE"
                         tasks={doneTasks}
-                        onCheck={handleTaskCheck}
+                        onCheck={moveTaskToPending}
                     />
                 )}
             </TasksListStyled>
