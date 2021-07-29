@@ -79,13 +79,13 @@ const Home = ({
 
             <div className="lists-wrapper">
                 <TasksList
-                    title="PENDING"
+                    title="PENDIENTES"
                     tasks={pendingTasks}
                     onCheck={moveTaskToDone}
                 />
                 {showDoneTasks && (
                     <TasksList
-                        title="DONE"
+                        title="FINALIZADAS"
                         tasks={doneTasks}
                         onCheck={moveTaskToPending}
                     />
