@@ -11,7 +11,7 @@ const Button = ({
         disabled ? "disabled" : ""
     }`;
     return (
-        <ButtonStyled className={classes} onClick={onClick}>
+        <ButtonStyled className={classes} onClick={onClick} disabled={disabled}>
             {text}
         </ButtonStyled>
     );
