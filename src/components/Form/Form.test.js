@@ -4,22 +4,24 @@ import { fireEvent, render } from "@testing-library/react";
 import Form from ".";
 
 describe("<Form />", () => {
-    const mockHandler = jest.fn();
+    const mockOnSubmit = jest.fn();
     const btnText = "button testing text";
     const placeHolderText = "placeHolder testing text";
 
     let component;
+    let form;
     let button;
     let input;
 
     beforeEach(() => {
         component = render(
             <Form
-                onSubmit={mockHandler}
+                onSubmit={mockOnSubmit}
                 inputPlaceHolder={placeHolderText}
                 textButton={btnText}
             />
         );
+        form = component.getByTestId(/form/);
         button = component.getByText(btnText);
         input = component.getByPlaceholderText(placeHolderText);
     });
@@ -39,7 +41,7 @@ describe("<Form />", () => {
         expect(input.value).toBe(mockEvent.target.value);
 
         fireEvent.click(button);
-        expect(mockHandler).toHaveBeenCalledTimes(0);
+        expect(mockOnSubmit).toHaveBeenCalledTimes(0);
     });
 
     test("clicking the button calls event once if input is not empty", () => {
@@ -49,6 +51,16 @@ describe("<Form />", () => {
         expect(input.value).toBe(mockEvent.target.value);
 
         fireEvent.click(button);
-        expect(mockHandler).toHaveBeenCalledTimes(1);
+        expect(mockOnSubmit).toHaveBeenCalled();
+    });
+
+    test("submiting the form calls event once if input is not empty", () => {
+        const mockEvent = { target: { value: "some user input" } };
+
+        fireEvent.change(input, mockEvent);
+        expect(input.value).toBe(mockEvent.target.value);
+
+        fireEvent.submit(form);
+        expect(mockOnSubmit).toHaveBeenCalled();
     });
 });

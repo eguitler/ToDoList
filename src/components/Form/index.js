@@ -18,7 +18,7 @@ const Form = ({ onSubmit, inputPlaceHolder, textButton }) => {
     }
 
     return (
-        <FormStyled onSubmit={handleSubmit}>
+        <FormStyled onSubmit={handleSubmit} data-testid="form">
             <input
                 placeholder={inputPlaceHolder}
                 onChange={handleChange}

@@ -4,10 +4,8 @@ import { openEditForm, updateTaskDescription } from "taskReducers";
 import Form from "components/Form";
 import { Container, EditFormStyled, TaskStyled } from "./styles";
 
-
 const Task = ({
     task,
-    checked,
     onCheck,
     taskIdEditFormOpened,
     openEditForm,
@@ -44,20 +42,24 @@ const Task = ({
             setEditFormIsMounted(false);
     }, [taskIdEditFormOpened]);
     return (
-        <Container>
+        <Container data-testid="task">
             <TaskStyled
                 className={taskIdEditFormOpened === task.id ? "highlight" : ""}
             >
                 <input
-                    name="checkbox"
+                    title={
+                        task.checked
+                            ? "Marcar como pendiente"
+                            : "Completar tarea"
+                    }
                     type="checkbox"
                     className="checkbox"
                     taskid={task.id}
-                    defaultChecked={checked}
+                    defaultChecked={task.checked}
                     onClick={onCheck}
                 />
                 <p className={`description ${task.checked ? "done" : ""}`}>
-                    {task.description}{" "}
+                    {task.description}
                 </p>
                 <div
                     className="edit-icon-wrapper"
@@ -70,6 +72,7 @@ const Task = ({
 
             {showEditForm && (
                 <EditFormStyled
+                    data-testid="edit-form-wrapper"
                     className={editFormIsMounted ? "open" : "close"}
                     onAnimationEnd={() => {
                         if (!editFormIsMounted) setShowEditForm(false);

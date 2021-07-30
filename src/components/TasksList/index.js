@@ -4,7 +4,7 @@ import { TasksListStyled } from "./styles";
 
 const TasksList = ({ title, tasks, onCheck }) => {
     return (
-        <TasksListStyled>
+        <TasksListStyled data-testid={`${title.toLowerCase()}-tasks-list`}>
             <h3>{title}</h3>
             <div className="divider" />
             {tasks.length === 0 ? (
@@ -17,7 +17,7 @@ const TasksList = ({ title, tasks, onCheck }) => {
                         <Task
                             key={task.id}
                             task={task}
-                            checked={task.checked}
+                            checked={task.checked} // remove this
                             onCheck={onCheck}
                         />
                     );
