@@ -12,7 +12,7 @@ import {
     removeFromPending,
 } from "taskReducers";
 
-import { HomeStyled } from "./styles";
+import { Container, HomeStyled } from "./styles";
 import Footer from "Layout/Footer";
 
 const Home = ({
@@ -57,7 +57,7 @@ const Home = ({
     }
 
     return (
-        <>
+        <Container>
             <HomeStyled>
                 <div className="title-wrapper">
                     <h1>Lista de Tareas</h1>
@@ -95,7 +95,7 @@ const Home = ({
                 </div>
             </HomeStyled>
             <Footer />
-        </>
+        </Container>
     );
 };
 

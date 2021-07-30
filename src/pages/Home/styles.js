@@ -1,5 +1,12 @@
 import styled from "@emotion/styled";
 
+export const Container = styled.div`
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+`
 export const HomeStyled = styled.div`
     display: flex;
     flex-direction: column;
@@ -9,7 +16,6 @@ export const HomeStyled = styled.div`
     min-width: 250px;
     margin: 0 auto;
     gap: 30px;
-    min-height: 100vh;
 
     .title-wrapper {
         margin-top: 30px;
