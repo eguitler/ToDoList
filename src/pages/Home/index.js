@@ -13,6 +13,7 @@ import {
 } from "taskReducers";
 
 import { HomeStyled } from "./styles";
+import Footer from "Layout/Footer";
 
 const Home = ({
     newPosition,
@@ -56,42 +57,45 @@ const Home = ({
     }
 
     return (
-        <HomeStyled>
-            <div className="title-wrapper">
-                <h1>Lista de Tareas</h1>
-            </div>
-            <div className="btn-showdonetasks-wrapper">
-                <Button
-                    text={`${
-                        showDoneTasks ? "Ocultar" : "Mostrar"
-                    } completadas`}
-                    onClick={() => setShowDoneTasks(!showDoneTasks)}
-                />
-            </div>
-            <div className="form-newtask-wrapper">
-                <Form
-                    onSubmit={createNewTask}
-                    inputName="task"
-                    inputPlaceHolder="Nueva tarea"
-                    textButton="Agregar"
-                />
-            </div>
-
-            <div className="lists-wrapper">
-                <TasksList
-                    title="PENDIENTES"
-                    tasks={pendingTasks}
-                    onCheck={moveTaskToDone}
-                />
-                {showDoneTasks && (
-                    <TasksList
-                        title="FINALIZADAS"
-                        tasks={doneTasks}
-                        onCheck={moveTaskToPending}
+        <>
+            <HomeStyled>
+                <div className="title-wrapper">
+                    <h1>Lista de Tareas</h1>
+                </div>
+                <div className="btn-showdonetasks-wrapper">
+                    <Button
+                        text={`${
+                            showDoneTasks ? "Ocultar" : "Mostrar"
+                        } completadas`}
+                        onClick={() => setShowDoneTasks(!showDoneTasks)}
                     />
-                )}
-            </div>
-        </HomeStyled>
+                </div>
+                <div className="form-newtask-wrapper">
+                    <Form
+                        onSubmit={createNewTask}
+                        inputName="task"
+                        inputPlaceHolder="Nueva tarea"
+                        textButton="Agregar"
+                    />
+                </div>
+
+                <div className="lists-wrapper">
+                    <TasksList
+                        title="PENDIENTES"
+                        tasks={pendingTasks}
+                        onCheck={moveTaskToDone}
+                    />
+                    {showDoneTasks && (
+                        <TasksList
+                            title="FINALIZADAS"
+                            tasks={doneTasks}
+                            onCheck={moveTaskToPending}
+                        />
+                    )}
+                </div>
+            </HomeStyled>
+            <Footer />
+        </>
     );
 };
 
